@@ -1,0 +1,21 @@
+{
+  "name": "lesson-01-ai-api-call",
+  "version": "1.0.0",
+  "description": "Learning two ways to call an AI API",
+  "license": "ISC",
+  "author": "pruthviraj deshmukh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.125.0",
+    "@google/genai": "^2.22.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
