@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 
 import sdkRouter from "./routes/sdk.route.js";
+import fetchRouter from "./routes/fetch.route.js";
 
 const app = express();
 app.use(express.json());
@@ -13,5 +14,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/sdk", sdkRouter);
+app.use("/api/fetch", fetchRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
