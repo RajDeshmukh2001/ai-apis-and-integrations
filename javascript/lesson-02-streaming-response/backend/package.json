@@ -1,0 +1,25 @@
+{
+  "name": "streaming-response",
+  "version": "1.0.0",
+  "description": "Showing text token by token as it's generated, exactly like the typing effect in ChatGPT and Claude.",
+  "keywords": [
+    "ai",
+    "stream",
+    "response"
+  ],
+  "license": "ISC",
+  "author": "Pruthviraj deshmukh",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google/genai": "^2.23.0",
+    "dotenv": "^18.0.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
