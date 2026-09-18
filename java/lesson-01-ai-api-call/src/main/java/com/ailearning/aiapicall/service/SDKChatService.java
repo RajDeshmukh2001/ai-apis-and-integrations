@@ -20,18 +20,17 @@ public class SDKChatService {
                 .model("gemini-3.1-flash-lite")
                 .input(InteractionsInput.of(request.input()))
                 .systemInstruction("You are a helpful assistant for a developer learning platform.")
+                .generationConfig(
+                        GenerationConfig.builder()
+                                .maxOutputTokens(1000)
+                                .build()
+                )
                 .build();
 
         Interaction interaction = client.interactions
                 .create(CreateInteractionRequestBody.of(params))
                 .interaction()
                 .get();
-
-        System.out.println("Interaction: " + interaction);
-        System.out.println("=".repeat(200));
-        System.out.println("\nOutput text: " + interaction.outputText());
-        System.out.println("=".repeat(200));
-        System.out.println("\nSteps: " + interaction.steps());
 
         return new ChatResponse(
                 interaction.outputText().orElse("")

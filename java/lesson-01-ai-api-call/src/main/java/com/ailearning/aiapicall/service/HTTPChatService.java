@@ -36,7 +36,11 @@ public class HTTPChatService {
         GeminiRequestBody requestBody = new GeminiRequestBody(
                 "gemini-3.1-flash-lite",
                 request.input(),
-                "You are a helpful assistant for a developer learning platform."
+                "You are a helpful assistant for a developer learning platform.",
+                new GeminiRequestBody.GenerationConfig(
+                        0.7f,
+                        1000
+                )
         );
 
         GeminiResponse response = restClient.post()
