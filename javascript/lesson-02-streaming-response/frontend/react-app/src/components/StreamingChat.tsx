@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { readStream } from "../utils/stream.ts";
 import { sendChatMessage } from "../api/sendChatMessage.api.ts";
 import Markdown from "react-markdown";
@@ -8,6 +8,8 @@ const StreamingChat = (): React.JSX.Element => {
     const [response, setResponse] = useState<string>("");
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
 
+    const abortController = useRef<AbortController | null>(null);
+
     const handleSubmit = async (): Promise<void> => {
         if (!input.trim()) {
             return;
@@ -16,8 +18,11 @@ const StreamingChat = (): React.JSX.Element => {
         setResponse("");
         setIsStreaming(true);
 
+        const controller = new AbortController();
+        abortController.current = controller;
+
         try {
-            const apiResponse = await sendChatMessage(input.trim());
+            const apiResponse = await sendChatMessage(input.trim(), controller.signal);
 
             await readStream(apiResponse, (text) => {
                 setResponse((previous) => previous + text);
@@ -27,6 +32,11 @@ const StreamingChat = (): React.JSX.Element => {
         } finally {
             setIsStreaming(false);
         }
+    }
+
+    const handleStop = (): void => {
+        abortController.current?.abort();
+        setIsStreaming(false);
     }
 
     return (
@@ -39,13 +49,24 @@ const StreamingChat = (): React.JSX.Element => {
                     placeholder="Ask something..."
                 />
 
-                <button
-                    onClick={handleSubmit}
-                    disabled={isStreaming}
-                    className="w-fit mt-2 bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 self-end cursor-pointer"
-                >
-                    {isStreaming ? "Generating" : "Send"}
-                </button>
+                <div className="mt-2 flex items-center justify-end gap-4">
+                    <button
+                        onClick={handleSubmit}
+                        disabled={isStreaming}
+                        className="w-fit bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 self-end cursor-pointer"
+                    >
+                        {isStreaming ? "Generating" : "Send"}
+                    </button>
+
+                    {isStreaming &&
+                        <button
+                            onClick={handleStop}
+                            className="w-fit bg-red-600 text-white px-4 py-2 rounded self-end cursor-pointer"
+                        >
+                            Stop
+                        </button>
+                    }
+                </div>
 
                 <div className="mt-6 whitespace-pre-wrap text-justify">
                     <Markdown>{response}</Markdown>

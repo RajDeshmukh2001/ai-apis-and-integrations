@@ -1,10 +1,14 @@
-export const sendChatMessage = async (input: string): Promise<Response> => {
+export const sendChatMessage = async (
+    input: string,
+    signal: AbortSignal
+): Promise<Response> => {
     const response = await fetch("http://localhost:3000/api/chat", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ input })
+        body: JSON.stringify({ input }),
+        signal
     });
 
     return response;
