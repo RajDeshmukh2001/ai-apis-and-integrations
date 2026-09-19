@@ -7,6 +7,7 @@ const StreamingChat = (): React.JSX.Element => {
     const [input, setInput] = useState<string>("");
     const [response, setResponse] = useState<string>("");
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const abortController = useRef<AbortController | null>(null);
 
@@ -16,6 +17,7 @@ const StreamingChat = (): React.JSX.Element => {
         }
 
         setResponse("");
+        setError(null);
         setIsStreaming(true);
 
         const controller = new AbortController();
@@ -29,6 +31,7 @@ const StreamingChat = (): React.JSX.Element => {
             })
         } catch (error) {
             console.error(error);
+            setError("Something went wrong. Please try again.")
         } finally {
             setIsStreaming(false);
         }
@@ -72,6 +75,12 @@ const StreamingChat = (): React.JSX.Element => {
                     <Markdown>{response}</Markdown>
                     {isStreaming && <span className="animate-pulse">▊</span>}
                 </div>
+
+                {error && (
+                    <div className="mt-2 text-red-600">
+                        {error}
+                    </div>
+                )}
             </div>
         </div>
     )
