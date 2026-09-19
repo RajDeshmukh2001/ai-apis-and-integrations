@@ -1,10 +1,13 @@
 import "./App.css";
+import StreamingChat from "./components/StreamingChat";
 
 function App() {
   return (
-    <>
-      <h1>Gemini Streaming Response</h1>
-    </>
+    <main className="m-20 space-y-10">
+      <h1 className="text-2xl">Gemini Streaming Response</h1>
+
+      <StreamingChat />
+    </main>
   );
 }
 
