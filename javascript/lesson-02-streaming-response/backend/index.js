@@ -3,6 +3,7 @@ import cors from "cors";
 import "dotenv/config";
 
 import chatRouter from "./routes/chat.route.js";
+import aiChatRouter from "./routes/aiChat.route.js";
 
 const app = express();
 
@@ -16,5 +17,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api", chatRouter);
+app.use("/api", aiChatRouter);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
