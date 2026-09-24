@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
+import { executeTool } from "./toolDispatcher.service.js";
 import { customerOrdersTool, orderStatusTool } from "../tools/order.tool.js";
-import { getOrderStatus, listCustomerOrders } from "./order.service.js";
 
 const apiKey = process.env.GOOGLE_AI_API_KEY;
 
@@ -16,44 +16,34 @@ or make up order details. If a tool returns an error, tell the customer
 clearly and suggest they double-check the order ID.`;
 
 export const runSupportAgent = async (input: string) => {
-    const interaction = await client.interactions.create({
+    let interaction = await client.interactions.create({
         model: "gemini-3.5-flash-lite",
         input,
         system_instruction: SYSTEM_PROMPT,
         tools: [orderStatusTool, customerOrdersTool]
     });
 
-    const step = interaction.steps.find((s) => s.type === "function_call");
+    while (interaction.status === "requires_action") {
+        const functionCalls = interaction.steps.filter(
+            (step) => step.type === "function_call"
+        );
 
-    if (step?.type === "function_call") {
-        let result;
-        
-        if (step.name === "get_order_status") {
-            result = await getOrderStatus(step.arguments.order_id);
+        const toolResults = await Promise.all(
+            functionCalls.map(async (step) => ({
+                type: "function_result" as const,
+                name: step.name,
+                call_id: step.id,
+                result: JSON.stringify(
+                    await executeTool(step.name, step.arguments)
+                )
+            }))
+        );
 
-            console.log("Tool result: ", result);
-        }
-
-        if (step.name === "list_customer_orders") {
-            result = await listCustomerOrders(step.arguments.customer_id);
-
-            console.log("Tool result: ", result);
-        }
-
-        const response = await client.interactions.create({
+        interaction = await client.interactions.create({
             model: "gemini-3.5-flash-lite",
             previous_interaction_id: interaction.id,
-            input: [
-                {
-                    type: "function_result",
-                    name: step.name,
-                    call_id: step.id,
-                    result: JSON.stringify(result),
-                }
-            ]
+            input: toolResults,
         });
-
-        return response;
     }
 
     return interaction;

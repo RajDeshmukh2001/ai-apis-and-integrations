@@ -23,7 +23,7 @@ export const customerOrdersTool = {
         properties: {
             customer_id: {
                 type: "string",
-                description: "The customer's unique ID"
+                description: "The customer's unique ID, e.g. CUST5432"
             }
         },
         required: ["customer_id"]
