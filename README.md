@@ -2,10 +2,17 @@
 
 Hands-on implementations of AI API integrations using Node.js/Express and Java/Spring Boot.
 
-## Stacks
+## Tech Stack
 
-- Node.js / Express
-- Java / Spring Boot
+- Node.js (24)
+- Java (21)
+- Express.js
+- Spring Boot
+- React.js
+- TypeScript
+- PostgreSQL (18)
+- Google Gen AI SDK
+- Vercel AI SDK
 
 ---
 
@@ -70,4 +77,24 @@ Each **chunk** is a small piece of the response — often just one or a few toke
 | Stack | Implementation |
 |---|---|
 | Javascript | `javascript/lesson-02-streaming-response` |
-| Java | `java/lesson-02-streaming-response` |
+| Java | `java/lesson-02-streaming-response` 
+
+---
+
+### Lesson 3 — Function/Tool Calling
+
+Tool calling is a loop:
+```
+1. Define tools (JSON schema description of your functions)
+2. Send user message + tools to the model
+3. Model responds — either plain text, or a request to call a tool
+4. If tool call requested: execute your REAL function (query DB, call API)
+5. Send the tool's result back to the model
+6. Model generates the final answer using that real data
+7. Return final answer to the user
+```
+
+| Stack | Implementation |
+|---|---|
+| Javascript | `javascript/lesson-03-tool-calling` |
+| Java | `java/lesson-03-tool-calling` |
