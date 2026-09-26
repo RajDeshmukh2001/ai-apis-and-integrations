@@ -1,0 +1,20 @@
+{
+  "name": "lesson-04-structured-output",
+  "version": "1.0.0",
+  "description": "Define a tool that the model is forced to call, and its schema becomes a guaranteed output structure.",
+  "license": "ISC",
+  "author": "Pruthviraj",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@google/genai": "^2.24.0",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
